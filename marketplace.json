@@ -1,0 +1,10 @@
+{
+  "name": "imagegen-gemini",
+  "version": "1.0.0",
+  "description": "Generate and edit images using Google Gemini API (Nano Banana models)",
+  "skills": ["imagegen-gemini"],
+  "repository": "https://github.com/yourusername/imagegen-gemini",
+  "keywords": ["image", "generation", "gemini", "ai", "nano-banana"],
+  "author": "",
+  "license": "MIT"
+}
