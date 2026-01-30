@@ -18,7 +18,7 @@ except ImportError:
     from google.genai import types
 
 MODELS = {
-    "flash": "gemini-2.5-flash-preview-05-20",
+    "flash": "gemini-2.5-flash",
     "flash-image": "gemini-2.5-flash-image",
     "pro-image": "gemini-3-pro-image-preview",
 }

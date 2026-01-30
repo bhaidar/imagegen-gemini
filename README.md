@@ -2,6 +2,23 @@
 
 Generate and edit images using Google's Gemini API with Nano Banana models.
 
+## Quick Start
+
+```bash
+# 1. Install skill
+git clone https://github.com/bhaidar/imagegen-gemini.git ~/.claude/skills/imagegen-gemini
+
+# 2. Install dependencies
+pip3 install -r ~/.claude/skills/imagegen-gemini/requirements.txt
+
+# 3. Set API key (get one at https://aistudio.google.com/apikey)
+echo 'export GEMINI_API_KEY="your_key_here"' >> ~/.zshrc
+source ~/.zshrc
+
+# 4. Generate an image
+python3 ~/.claude/skills/imagegen-gemini/scripts/generate_image.py "A sunset over mountains" -o sunset.png
+```
+
 ## Features
 
 - **Text to Image**: Generate images from text prompts
@@ -18,40 +35,72 @@ Generate and edit images using Google's Gemini API with Nano Banana models.
 
 ### For Claude Code (CLI)
 
-**Global install** (available in all projects):
+#### Option 1: Global Install (available in all projects)
+
 ```bash
-git clone https://github.com/yourusername/imagegen-gemini.git ~/.claude/skills/imagegen-gemini
+# Clone to global Claude skills directory
+git clone https://github.com/bhaidar/imagegen-gemini.git ~/.claude/skills/imagegen-gemini
+
+# Install Python dependencies
+pip3 install -r ~/.claude/skills/imagegen-gemini/requirements.txt
+
+# Set API key in your shell profile (~/.bashrc or ~/.zshrc)
+echo 'export GEMINI_API_KEY="your_api_key_here"' >> ~/.zshrc
+source ~/.zshrc
 ```
 
-**Project install** (available in current project only):
+#### Option 2: Project Install (available in current project only)
+
 ```bash
-git clone https://github.com/yourusername/imagegen-gemini.git .claude/skills/imagegen-gemini
+# Clone to project's Claude skills directory
+git clone https://github.com/bhaidar/imagegen-gemini.git .claude/skills/imagegen-gemini
+
+# Install Python dependencies
+pip3 install -r .claude/skills/imagegen-gemini/requirements.txt
+
+# Set API key in your shell profile (~/.bashrc or ~/.zshrc)
+echo 'export GEMINI_API_KEY="your_api_key_here"' >> ~/.zshrc
+source ~/.zshrc
 ```
+
+**Note:** After installation, restart your terminal or run `source ~/.zshrc` (or `~/.bashrc`) for the API key to take effect.
 
 ### For Claude.ai (Web/App)
 
 1. Download this repo as a ZIP
 2. Go to Settings > Capabilities > Skills
 3. Click "Upload skill" and select the ZIP file
+4. The skill will prompt you for the API key if needed
 
 ### API Key Setup
 
 Get your free API key at: https://aistudio.google.com/apikey
 
-**For Claude Code**, add to your shell profile (`~/.bashrc` or `~/.zshrc`):
-```bash
-export GEMINI_API_KEY="your_api_key_here"
-```
-
-**For Claude.ai**, the skill will prompt you if the key is missing.
+**Important:** The free tier has rate limits. See [Troubleshooting](#troubleshooting) for quota issues.
 
 ### Standalone Usage
 
 ```bash
-git clone https://github.com/yourusername/imagegen-gemini.git
+git clone https://github.com/bhaidar/imagegen-gemini.git
 cd imagegen-gemini
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 export GEMINI_API_KEY="your_api_key_here"
+```
+
+### Verifying Installation
+
+Test the installation:
+```bash
+python3 ~/.claude/skills/imagegen-gemini/scripts/generate_image.py "test image" -o test.png --json
+```
+
+If successful, you should see:
+```json
+{
+  "success": true,
+  "path": "/absolute/path/to/test.png",
+  "model": "gemini-2.5-flash-image"
+}
 ```
 
 ## Usage
@@ -100,7 +149,7 @@ Output:
 
 | Model | Gemini ID | Description |
 |-------|-----------|-------------|
-| `flash` | gemini-2.5-flash-preview-05-20 | Fast, general purpose (default) |
+| `flash` | gemini-2.5-flash | Fast, general purpose (default) |
 | `flash-image` | gemini-2.5-flash-image | Nano Banana, optimized for speed |
 | `pro-image` | gemini-3-pro-image-preview | Nano Banana Pro, highest quality |
 
@@ -172,12 +221,48 @@ Set your API key:
 ```bash
 export GEMINI_API_KEY="your_key_here"
 ```
+Then restart your terminal or run `source ~/.zshrc` (or `~/.bashrc`).
+
+### "429 RESOURCE_EXHAUSTED" or "Quota exceeded"
+You've hit the free tier rate limit. Solutions:
+- **Wait:** The error message shows retry time (e.g., "Please retry in 47s")
+- **Upgrade:** Consider upgrading to a paid plan at https://ai.google.dev/pricing
+- **Monitor usage:** Check current usage at https://ai.dev/rate-limit
+- **Use different model:** Try `-m flash` instead of `-m flash-image`
+
+Free tier limits (as of 2026):
+- Requests per day: Varies by model
+- Requests per minute: Limited
+- Check current limits: https://ai.google.dev/gemini-api/docs/rate-limits
+
+### "404 NOT_FOUND" or "model is not found"
+The model name may have changed. Try:
+- Use `-m flash-image` (recommended for image generation)
+- Use `-m pro-image` (highest quality, but may have stricter limits)
 
 ### "No image generated"
-Some prompts may be blocked by safety filters. Try rephrasing your prompt.
+Some prompts may be blocked by safety filters. Try:
+- Rephrasing your prompt
+- Being more specific and descriptive
+- Avoiding potentially sensitive content
 
-### Rate Limits
-The free tier has usage limits. Check https://ai.google.dev/pricing for current limits.
+### Installation Issues
+
+**Dependencies not installed:**
+```bash
+pip3 install -r requirements.txt
+```
+
+**Permission errors on macOS/Linux:**
+```bash
+pip3 install --user -r requirements.txt
+```
+
+**Python not found:**
+Make sure Python 3.9+ is installed:
+```bash
+python3 --version
+```
 
 ## License
 
